@@ -1,7 +1,9 @@
 namespace Africuisine.Application.Res
 {
-    public class QueryItemsResponse<TEntity> : BaseResponse where TEntity : class
+    public class QueryItemsResponse<TEntity> : BaseResponse
+        where TEntity : class
     {
-        IReadOnlyList<TEntity> Items { get; set; }
+        public IReadOnlyList<TEntity> Items { get; set; }
+        public ErrorResponse Error { get; set; }
     }
 }

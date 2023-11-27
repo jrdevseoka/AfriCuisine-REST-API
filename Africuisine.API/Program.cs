@@ -1,7 +1,8 @@
 using Africuisine.Application.Config;
 using Africuisine.Infrastructure;
 using Africuisine.Infrastructure.Helpers;
-
+using Microsoft.AspNetCore.Mvc;
+[assembly: ApiController]
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
