@@ -6,7 +6,7 @@ namespace Africuisine.Application.Interfaces.User
 {
     public interface IUserService
     {
-        Task<BaseResponse> Create(CreateUserCommand command);
+        Task<PostResponse> Create(CreateUserCommand command);
         Task<QueryItemResponse<ProfileSM>> GetAuthenticatedUserDetails(string email);
     }
 }

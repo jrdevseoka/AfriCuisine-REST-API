@@ -3,6 +3,7 @@ using Africuisine.Application.Commands.User;
 using Africuisine.Application.Interfaces.Auth;
 using Africuisine.Application.Interfaces.Error;
 using Africuisine.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Africuisine.API.Controllers.Auth
@@ -22,6 +23,7 @@ namespace Africuisine.API.Controllers.Auth
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> SignIn(UserLoginCommand request)
         {
             try
@@ -37,6 +39,7 @@ namespace Africuisine.API.Controllers.Auth
         }
 
         [HttpGet("request-password")]
+        [AllowAnonymous]
         public async Task<IActionResult> RequestPasswordToken([FromQuery]string email)
         {
             try
@@ -51,6 +54,7 @@ namespace Africuisine.API.Controllers.Auth
             }
         }
         [HttpPost("update-password")]
+        [AllowAnonymous]
         public async Task<IActionResult> Update(PasswordResetTokenCommand command)
         {
             try

@@ -3,6 +3,7 @@ using Africuisine.Application.Commands.User;
 using Africuisine.Application.Interfaces.Error;
 using Africuisine.Application.Interfaces.User;
 using Africuisine.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Africuisine.API.Controllers.Users
@@ -18,6 +19,7 @@ namespace Africuisine.API.Controllers.Users
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create(CreateUserCommand request)
         {
             try
@@ -31,6 +33,7 @@ namespace Africuisine.API.Controllers.Users
             }
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Profile([FromQuery]string email)
         {
             try
