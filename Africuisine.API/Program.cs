@@ -1,17 +1,22 @@
 using Africuisine.Application.Config;
 using Africuisine.Infrastructure;
+using Africuisine.Infrastructure.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers( opts => {
+    opts.Filters.Add<NlogFolderFilter>();
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //Custom Service Injections
-
-JWTBearer? jwtOptions = builder.Configuration.GetSection("JWT").Get<JWTBearer>();
+Database database = builder.Configuration.GetSection("ConnectionStrings:AfricuisineConnection").Get<Database>();
+JWTBearer jwtOptions = builder.Configuration.GetSection("JWT").Get<JWTBearer>();
+builder.Services.RegisterAuthInjections(jwtOptions);
+builder.Services.RegisterIdentity();
 builder.Services.RegisterAuthInjections(jwtOptions);
 
 var app = builder.Build();

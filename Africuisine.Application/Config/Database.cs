@@ -1,6 +1,6 @@
 namespace Africuisine.Application.Config
 {
-    public class DatabaseConfig
+    public class Database
     {
         public string Connection { get; set; }
     }

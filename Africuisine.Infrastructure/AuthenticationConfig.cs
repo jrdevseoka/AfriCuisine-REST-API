@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using Africuisine.Application.Config;
+using Africuisine.Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -10,7 +12,11 @@ namespace Africuisine.Infrastructure
     {
         public static IServiceCollection RegisterIdentity(this IServiceCollection services)
         {
-            
+            services
+            .AddIdentity<UserDM, RoleDM>()
+            .AddEntityFrameworkStores<AuthDBContext>()
+            .AddDefaultTokenProviders();;
+
             return services;
         }
         public static IServiceCollection RegisterAuthInjections(this IServiceCollection services, JWTBearer options)
