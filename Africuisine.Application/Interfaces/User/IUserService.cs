@@ -8,5 +8,6 @@ namespace Africuisine.Application.Interfaces.User
     {
         Task<PostResponse> Create(CreateUserCommand command);
         Task<QueryItemResponse<ProfileSM>> GetAuthenticatedUserDetails(string email);
+        Task<PostResponse> ConfirmAccount(string email, string token);
     }
 }

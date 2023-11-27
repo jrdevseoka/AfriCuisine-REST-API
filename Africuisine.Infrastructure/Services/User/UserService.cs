@@ -69,14 +69,13 @@ public class UserService : BaseService, IUserService
     {
         var user = await Manager.FindByEmailAsync(email);
         var profile = Mapper.Map<ProfileSM>(user);
-        
+
         dynamic role = (await Manager.GetRolesAsync(user)).First();
         role = Mapper.Map<RoleSM>(role);
         profile.Role = role;
-
         //!TODO - Retrieve Profile picture where status is activated
 
-        return new QueryItemResponse<ProfileSM> { Succeeded = profile is not null, Item = profile};
+        return new QueryItemResponse<ProfileSM> { Succeeded = profile is not null, Item = profile };
     }
 
     private static string GenerateErrorMessage(IEnumerable<IdentityError> errors)
@@ -105,5 +104,20 @@ public class UserService : BaseService, IUserService
         string encodeEmail = Uri.EscapeDataString(email);
         string encodedToken = Uri.UnescapeDataString(token);
         return string.Format("/users?confirm?token={0}&email={1}", encodedToken, encodeEmail);
+    }
+
+    public async Task<PostResponse> ConfirmAccount(string email, string token)
+    {
+        string message = "Invalid Account Confirmation Details.";
+        var user = await Manager.FindByEmailAsync(email);
+        if (user != null)
+        {
+            var response = await Manager.ConfirmEmailAsync(user, token);
+            message = response.Succeeded
+                ? $"Account with {email} email address has been verified."
+                : $"Account with {email} could not be verified. Please try again.";
+            return new PostResponse { Succeeded = response.Succeeded, Message = message };
+        }
+        return new PostResponse { Succeeded = false, Message = message };
     }
 }
