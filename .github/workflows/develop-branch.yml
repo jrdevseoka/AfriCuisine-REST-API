@@ -1,0 +1,38 @@
+name: Feature/BugResolve To Develop Branch Merge
+
+on:
+  pull_request:
+    branches:
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NETCore
+        uses: actions/setup-dotnet@v7
+        with:
+          dotnet-version: 7.0.100
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Set Build Status
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const result = process.env['GITHUB_RUN_CONCLUSION'] === 'success' ? 'success' : 'failure';
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: result,
+              description: 'Build Status',
+              context: 'continuous-integration/build'
+            });
