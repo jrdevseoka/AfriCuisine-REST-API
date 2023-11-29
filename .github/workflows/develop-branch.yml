@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - develop
+
 jobs:
   build:
     runs-on: windows-latest
@@ -11,11 +12,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup .NETCore
+      
+
+      - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.310
-
+      
+      - name: Clean Solution
+        run: dotnet clean
+        
       - name: Restore Dependencies
         run: dotnet restore
 
@@ -23,11 +29,11 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Set Build Status
-        uses: actions/github-script@v5
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const result = env.GITHUB_RUN_CONCLUSION === 'success' ? 'success' : 'failure';
+            const result = process.env['GITHUB_RUN_CONCLUSION'] === 'success' ? 'success' : 'failure';
             github.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -36,4 +42,3 @@ jobs:
               description: 'Build Status',
               context: 'continuous-integration/build'
             });
-      
