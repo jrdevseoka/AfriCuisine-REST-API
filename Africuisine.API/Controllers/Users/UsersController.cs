@@ -32,7 +32,7 @@ namespace Africuisine.API.Controllers.Users
                 return BadRequest(exception.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("profile")]
         [Authorize]
         public async Task<IActionResult> Profile([FromQuery]string email)
         {

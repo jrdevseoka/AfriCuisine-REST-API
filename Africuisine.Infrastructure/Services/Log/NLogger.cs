@@ -6,7 +6,7 @@ namespace Africuisine.Infrastructure.Services.Log
     public class NLogger : INLogger
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        public void Error(Exception exception, string message)
+        public void Error(string message, Exception exception)
         {
             Logger.Error(exception, message);
         }

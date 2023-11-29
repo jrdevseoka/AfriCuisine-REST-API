@@ -18,14 +18,14 @@ builder.Services.AddControllers( opts => {
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterSwaggerGeneration();
 //Custom Service Injections
-Database database = builder.Configuration.GetSection("ConnectionStrings:AfricuisineConnection").Get<Database>();
+var connection = builder.Configuration.GetSection("ConnectionStrings").Get<Database>();
 JWTBearer jwtOptions = builder.Configuration.GetSection("JWT").Get<JWTBearer>();
 builder.Services.RegisterApplicationInjections();
 builder.Services.APIVersionInjection();
 builder.Services.RegisterOptionsConfigurations(builder.Configuration);
 builder.Services.RegisterIdentity();
 builder.Services.RegisterAuthInjections(jwtOptions);
-builder.Services.RegisterDBContext(database);
+    builder.Services.RegisterDBContext(connection);
 builder.Services.RegisterServiceInjection();
 
 var app = builder.Build();
