@@ -1,0 +1,40 @@
+name: Build and Test ASP.NET Core
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: SETUP .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+            dotnet-version: 7.0.x
+            # You can test your matrix by printing the current dotnet version
+      - name: Display dotnet version
+        run: dotnet --version
+
+      - name: Restore Nuget Packages
+        run: dotnet restore
+
+      - name: Build Domain
+        run: dotnet build --configuration Release Africuisine.Domain/Africuisine.Domain.csproj
+  
+      - name: Build Application
+        run: dotnet build --configuration Release Africuisine.Application/Africuisine.Application.csproj
+  
+      - name: Build Infrastructure
+        run: dotnet build --configuration Release Africuisine.Infrastructure/Africuisine.Infrastructure.csproj
+      - name: Build Tests
+        run: dotnet build --configuration Release Africuisine.Tests/Africuisine.Tests.csproj
+  
+      - name: Build API
+        run: dotnet build --configuration Release Africuisine.API/Africuisine.API.csproj
+      - name: Run NUnit Tests
+        run: dotnet test --configuration Release --no-restore
+         
