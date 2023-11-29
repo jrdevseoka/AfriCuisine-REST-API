@@ -6,7 +6,7 @@ on:
       - develop
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -14,7 +14,7 @@ jobs:
       - name: Setup .NETCore
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.100
+          dotnet-version: 7.0.310
 
       - name: Restore Dependencies
         run: dotnet restore
@@ -27,7 +27,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const result = process.env['GITHUB_RUN_CONCLUSION'] === 'success' ? 'success' : 'failure';
+            const result = env.GITHUB_RUN_CONCLUSION === 'success' ? 'success' : 'failure';
             github.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -36,3 +36,4 @@ jobs:
               description: 'Build Status',
               context: 'continuous-integration/build'
             });
+      
