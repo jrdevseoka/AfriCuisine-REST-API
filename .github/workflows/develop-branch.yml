@@ -21,13 +21,10 @@ jobs:
       
       - name: Clean Solution
         run: dotnet clean
-        
+
       - name: Restore Dependencies
         run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release
-
+        
       - name: Set Build Status
         uses: actions/github-script@v7
         with:
