@@ -36,6 +36,12 @@ namespace Africuisine.Infrastructure
         public static IServiceCollection RegisterSwaggerGeneration(this IServiceCollection services)
         {
             services.AddSwaggerGen(options => {
+                options.SwaggerDoc("1.0", new OpenApiInfo
+                {
+                    Version = "1.0",
+                    Title = "AfriCuisine REST API",
+                    License = new OpenApiLicense { Name = "MIT"}
+                });                
                 options.OperationFilter<SwaggerDefaultValueFilter>();
                 options.AddSecurityDefinition(
                     "Bearer",

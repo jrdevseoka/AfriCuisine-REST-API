@@ -1,10 +1,13 @@
+using Africuisine.Application;
 using Africuisine.Application.Config;
 using Africuisine.Infrastructure;
 using Africuisine.Infrastructure.Helpers;
-using Africuisine.Infrastructure.Helpers.Filters;
-using Microsoft.AspNetCore.Mvc;
-[assembly: ApiController]
-var builder = WebApplication.CreateBuilder(args);
+using NLog;
+
+var Logger = LogManager.Setup().LoadConfigurationFromFile("NLog.config").GetCurrentClassLogger();
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -14,18 +17,16 @@ builder.Services.AddControllers( opts => {
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterSwaggerGeneration();
-
-//Add Custom Services To Container
+//Custom Service Injections
 Database database = builder.Configuration.GetSection("ConnectionStrings:AfricuisineConnection").Get<Database>();
 JWTBearer jwtOptions = builder.Configuration.GetSection("JWT").Get<JWTBearer>();
-builder.Services.RegisterServiceInjection();
-builder.Services.RegisterAuthInjections(jwtOptions);
+builder.Services.RegisterApplicationInjections();
+builder.Services.APIVersionInjection();
 builder.Services.RegisterOptionsConfigurations(builder.Configuration);
 builder.Services.RegisterIdentity();
 builder.Services.RegisterAuthInjections(jwtOptions);
 builder.Services.RegisterDBContext(database);
-
-
+builder.Services.RegisterServiceInjection();
 
 var app = builder.Build();
 
@@ -33,7 +34,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI( opts => {
+        var descriptions = app.DescribeApiVersions();
+            foreach (var description in descriptions)
+            {
+                var url = $"/swagger/{description.GroupName}/swagger.json";
+                var name = description.GroupName.ToUpperInvariant();
+                opts.SwaggerEndpoint(url, name);
+            }
+    });
 }
 
 app.UseHttpsRedirection();
@@ -45,3 +54,12 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+}
+catch(Exception exception)
+{
+    Logger.Error(exception);
+}
+finally
+{
+    LogManager.Shutdown();
+}

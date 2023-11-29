@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Africuisine.API.Config
 {
-    [Route("api/{version:apiVersion}")]
+    [ApiController]
     [ApiVersion("1.0")]
-    public class APIBaseController<TEntity> : Controller where TEntity : class {
+    [Route("api/{version:apiVersion}/[controller]")]
+    public class APIBaseController<TEntity> : Controller
+        where TEntity : class
+    {
         protected IErrorService<TEntity> Error;
 
         public APIBaseController(IErrorService<TEntity> error)
