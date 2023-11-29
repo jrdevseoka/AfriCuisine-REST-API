@@ -13,7 +13,7 @@ namespace Africuisine.Infrastructure
 {
     public static class ServiceInjection
     {
-        public static IServiceCollection RegisterAPIInjection(this IServiceCollection services)
+        public static IServiceCollection RegisterServiceInjection(this IServiceCollection services)
         {
             services
             .AddScoped<IPostmarkService, PostmarkService>()
