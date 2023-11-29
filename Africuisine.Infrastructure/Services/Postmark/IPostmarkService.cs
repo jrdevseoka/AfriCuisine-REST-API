@@ -6,7 +6,6 @@ namespace Africuisine.Infrastructure.Services.Postmark
 {
     public interface IPostmarkService
     {
-        Task<BaseResponse> SendTemplateEmail(
-            SenderCommand sender, UserDM recipient, bool confirmation = false);
+        Task<BaseResponse> SendTemplateEmail(UserDM recipient,string url, string template = "");
     }
 }

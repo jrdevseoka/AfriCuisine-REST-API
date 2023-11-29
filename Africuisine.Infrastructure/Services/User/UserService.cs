@@ -16,7 +16,6 @@ public class UserService : BaseService, IUserService
 {
     private readonly UserManager<UserDM> Manager;
     private readonly RoleManager<RoleDM> RoleManager;
-    private readonly IJWTService JwtService;
     private JWTBearer JWT { get; set; }
 
     public UserService(
@@ -25,14 +24,12 @@ public class UserService : BaseService, IUserService
         IMapper mapper,
         UserManager<UserDM> manager,
         RoleManager<RoleDM> roleManager
-,
-        IJWTService jwtService)
+    )
         : base(logger, mapper)
     {
         Manager = manager;
         RoleManager = roleManager;
         JWT = options.Value;
-        JwtService = jwtService;
     }
 
     public async Task<PostResponse> Create(CreateUserCommand command)
@@ -52,7 +49,7 @@ public class UserService : BaseService, IUserService
                 response = await Manager.AddClaimsAsync(user, claims);
                 if (response.Succeeded)
                 {
-                    string token = await JwtService.GenerateJWTToken(claims);
+                    string token = await Manager.GenerateEmailConfirmationTokenAsync(user);
                     //! TODO - Going to implement Send Email Confirmation
                     command.HostUri += GenerateEmailConfirmationURI(token, user.Email);
                     return new PostResponse
