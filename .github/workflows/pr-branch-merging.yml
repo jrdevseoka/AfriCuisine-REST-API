@@ -23,19 +23,7 @@ jobs:
 
       - name: Restore Nuget Packages
         run: dotnet restore
-
-      - name: Build Domain
-        run: dotnet build --configuration Release Africuisine.Domain/Africuisine.Domain.csproj
-
-      - name: Build Application
-        run: dotnet build --configuration Release Africuisine.Application/Africuisine.Application.csproj
-
-      - name: Build Infrastructure
-        run: dotnet build --configuration Release Africuisine.Infrastructure/Africuisine.Infrastructure.csproj
-      - name: Build Tests
-        run: dotnet build --configuration Release Africuisine.Tests/Africuisine.Tests.csproj
-
-      - name: Build API
-        run: dotnet build --configuration Release Africuisine.API/Africuisine.API.csproj
+      - name: Build Africuisine Solution
+        run: dotnet build --configuration Release
       - name: Run NUnit Tests
-        run: dotnet test --configuration Release --no-restore
+        run: dotnet test --configuration Release Africuisine.Tests/Africuisine.Tests.csproj --no-restore
