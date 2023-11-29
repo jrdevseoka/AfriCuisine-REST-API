@@ -1,6 +1,6 @@
 namespace Africuisine.Application.Config
 {
-    public class SenderCommand
+    public class PostmarkCommand
     {
         public string Key { get; set; }
         public string SenderEmail { get; set; }

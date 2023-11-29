@@ -17,8 +17,10 @@ builder.Services.AddSwaggerGen();
 Database database = builder.Configuration.GetSection("ConnectionStrings:AfricuisineConnection").Get<Database>();
 JWTBearer jwtOptions = builder.Configuration.GetSection("JWT").Get<JWTBearer>();
 builder.Services.RegisterAuthInjections(jwtOptions);
+builder.Services.RegisterOptionsConfigurations(builder.Configuration);
 builder.Services.RegisterIdentity();
 builder.Services.RegisterAuthInjections(jwtOptions);
+builder.Services.RegisterDBContext(database);
 
 var app = builder.Build();
 

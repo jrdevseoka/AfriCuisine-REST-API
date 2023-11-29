@@ -7,6 +7,11 @@ class ErrorService<TEntity> : IErrorService<TEntity>
 {
     private readonly INLogger Logger;
 
+    public ErrorService(INLogger logger)
+    {
+        Logger = logger;
+    }
+
     public AuthResponse MapErrorToAuthResponse(Exception exception)
     {
         var error = MapError(exception, out string message);

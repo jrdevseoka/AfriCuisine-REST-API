@@ -1,9 +1,8 @@
 using Africuisine.Application.Config;
-using Africuisine.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Africuisine.API
+namespace Africuisine.Infrastructure
 {
     public static class DatabaseConfig
     {
