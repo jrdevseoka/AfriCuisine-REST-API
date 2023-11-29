@@ -6,8 +6,6 @@ using Africuisine.Infrastructure.Services.Auth;
 using Africuisine.Infrastructure.Services.Log;
 using Africuisine.Infrastructure.Services.Postmark;
 using Microsoft.AspNetCore.Routing;
-using Africuisine.Application.Interfaces;
-using Africuisine.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Asp.Versioning;
 using Africuisine.Infrastructure.Services.Error;
