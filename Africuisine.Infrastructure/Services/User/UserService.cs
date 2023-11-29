@@ -8,6 +8,7 @@ using Africuisine.Application.Requests.User;
 using Africuisine.Application.Res;
 using Africuisine.Domain.Models;
 using Africuisine.Infrastructure.Services;
+using Africuisine.Infrastructure.Services.Postmark;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -16,6 +17,8 @@ public class UserService : BaseService, IUserService
 {
     private readonly UserManager<UserDM> Manager;
     private readonly RoleManager<RoleDM> RoleManager;
+    private readonly IPostmarkService Postmark;
+    private readonly IJWTService JWTService;
     private JWTBearer JWT { get; set; }
 
     public UserService(
@@ -23,13 +26,16 @@ public class UserService : BaseService, IUserService
         IOptions<JWTBearer> options,
         IMapper mapper,
         UserManager<UserDM> manager,
-        RoleManager<RoleDM> roleManager
-    )
+        RoleManager<RoleDM> roleManager,
+        IPostmarkService postmark,
+        IJWTService jWTService)
         : base(logger, mapper)
     {
         Manager = manager;
         RoleManager = roleManager;
         JWT = options.Value;
+        Postmark = postmark;
+        JWTService = jWTService;
     }
 
     public async Task<PostResponse> Create(CreateUserCommand command)
@@ -45,18 +51,28 @@ public class UserService : BaseService, IUserService
             response = await Manager.AddToRoleAsync(user, role.Name);
             if (response.Succeeded)
             {
-                var claims = GenerateClaims(user, role);
+                var claims = JWTService.GenerateClaims(user, role);
                 response = await Manager.AddClaimsAsync(user, claims);
                 if (response.Succeeded)
                 {
                     string token = await Manager.GenerateEmailConfirmationTokenAsync(user);
-                    //! TODO - Going to implement Send Email Confirmation
                     command.HostUri += GenerateEmailConfirmationURI(token, user.Email);
-                    return new PostResponse
+                    var postmarkRes = await Postmark.SendTemplateEmail(
+                        user,
+                        command.HostUri,
+                        "confirmation"
+                    );
+                    if (postmarkRes.Succeeded)
                     {
-                        Message = "Your account was successfully created.",
-                        Succeeded = !string.IsNullOrEmpty(token)
-                    };
+                        return new PostResponse
+                        {
+                            Message = "Your account was successfully created.",
+                            Succeeded = true
+                        };
+                    }
+                    await Manager.DeleteAsync(user);
+                    return new PostResponse { Message = "Account failed to be created. Please try again", Succeeded = false};
+                    
                 }
             }
         }
