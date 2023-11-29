@@ -1,6 +1,5 @@
 using Africuisine.Application.Interfaces.Auth;
 using Africuisine.Application.Interfaces.Error;
-using Africuisine.Application.Interfaces.Log;
 using Africuisine.Application.Interfaces.User;
 using Africuisine.Infrastructure.Services.Auth;
 using Africuisine.Infrastructure.Services.Log;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Asp.Versioning;
 using Africuisine.Infrastructure.Services.Error;
 using Africuisine.Infrastructure.Services.User;
+using Africuisine.Application.Interfaces.Log;
 
 namespace Africuisine.Infrastructure
 {
