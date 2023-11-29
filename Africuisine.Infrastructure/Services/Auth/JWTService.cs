@@ -35,14 +35,14 @@ namespace Africuisine.Infrastructure.Services.Auth
             return tokenHandler.WriteToken(token);
         }
 
-        public IEnumerable<Claim> GenerateClaims(UserDM user, RoleDM role)
+        public IEnumerable<Claim> GenerateClaims(UserDM user, string roleName)
         {
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, user.Id),
                 new(ClaimTypes.Email, user.Email),
                 new(ClaimTypes.Name, user.Name),
-                new("role", role.Name),
+                new("role", roleName),
                 new("sub", user.Id),
                 new("aud", JWT.ValidAudience),
                 new("jti", Guid.NewGuid().ToString()),

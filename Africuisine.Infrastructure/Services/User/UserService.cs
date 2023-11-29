@@ -51,7 +51,7 @@ public class UserService : BaseService, IUserService
             response = await Manager.AddToRoleAsync(user, role.Name);
             if (response.Succeeded)
             {
-                var claims = JWTService.GenerateClaims(user, role);
+                var claims = JWTService.GenerateClaims(user, role.Name);
                 response = await Manager.AddClaimsAsync(user, claims);
                 if (response.Succeeded)
                 {

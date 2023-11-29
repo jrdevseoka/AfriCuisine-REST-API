@@ -37,36 +37,5 @@ namespace Africuisine.API.Controllers.Auth
                 return BadRequest(error);
             }
         }
-
-        [HttpGet("request-password")]
-        [AllowAnonymous]
-        public async Task<IActionResult> RequestPasswordToken([FromQuery]string email)
-        {
-            try
-            {
-                var response = await Service.GetResetPasswordToken(email);
-                return Ok(response);
-            }
-            catch (Exception exception)
-            {
-                var error = Error.MapErrorToAuthResponse(exception);
-                return BadRequest(error);
-            }
-        }
-        [HttpPost("update-password")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Update(PasswordResetTokenCommand command)
-        {
-            try
-            {
-                var response = await Service.ResetPassword(command);
-                return Ok(response);
-            }
-            catch (Exception exception)
-            {
-                var error = Error.MapErrorToAuthResponse(exception);
-                return BadRequest(error);
-            }
-        }
     }
 }
