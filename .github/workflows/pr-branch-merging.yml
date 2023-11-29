@@ -14,7 +14,7 @@ jobs:
       - name: Display GitHub Actions Environment
         run: dotnet --info
       - name: SETUP .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v3.2.0
         with:
           dotnet-version: 7.0.x
           # You can test your matrix by printing the current dotnet version
