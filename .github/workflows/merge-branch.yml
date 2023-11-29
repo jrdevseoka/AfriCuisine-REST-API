@@ -1,9 +1,11 @@
-name: Feature/BugResolve To Develop Branch Merge
+name: Merging Branches 
 
 on:
   pull_request:
     branches:
       - develop
+      - feature
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
