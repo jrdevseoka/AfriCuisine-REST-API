@@ -10,6 +10,8 @@ using Africuisine.Application.Interfaces;
 using Africuisine.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Asp.Versioning;
+using Africuisine.Infrastructure.Services.Error;
+using Africuisine.Infrastructure.Services.User;
 
 namespace Africuisine.Infrastructure
 {

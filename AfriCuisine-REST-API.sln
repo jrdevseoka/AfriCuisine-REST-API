@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Africuisine.Infrastructure", "Africuisine.Infrastructure\Africuisine.Infrastructure.csproj", "{82AC63AB-3144-4FF5-820B-DA9B663B8364}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Africuisine.Infrastructure", "Africuisine.Infrastructure\Africuisine.Infrastructure.csproj", "{82AC63AB-3144-4FF5-820B-DA9B663B8364}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Africuisine.Application", "Africuisine.Application\Africuisine.Application.csproj", "{175A3895-EAB4-4548-984E-2508CA71CB61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Africuisine.Application", "Africuisine.Application\Africuisine.Application.csproj", "{175A3895-EAB4-4548-984E-2508CA71CB61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Africuisine.API", "Africuisine.API\Africuisine.API.csproj", "{979E3EDA-BEC6-4D24-A6CD-38372857A744}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Africuisine.API", "Africuisine.API\Africuisine.API.csproj", "{979E3EDA-BEC6-4D24-A6CD-38372857A744}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Africuisine.Domain", "Africuisine.Domain\Africuisine.Domain.csproj", "{1C69FE7C-9F0B-4D0A-A381-5541623C360E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Africuisine.Domain", "Africuisine.Domain\Africuisine.Domain.csproj", "{1C69FE7C-9F0B-4D0A-A381-5541623C360E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Africuisine.Tests", "Africuisine.Tests\Africuisine.Tests.csproj", "{59A975A1-B71D-46E1-8084-6EC9C77E69C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1C69FE7C-9F0B-4D0A-A381-5541623C360E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C69FE7C-9F0B-4D0A-A381-5541623C360E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C69FE7C-9F0B-4D0A-A381-5541623C360E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59A975A1-B71D-46E1-8084-6EC9C77E69C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59A975A1-B71D-46E1-8084-6EC9C77E69C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59A975A1-B71D-46E1-8084-6EC9C77E69C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59A975A1-B71D-46E1-8084-6EC9C77E69C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
