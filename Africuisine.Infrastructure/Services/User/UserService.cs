@@ -41,8 +41,6 @@ namespace Africuisine.Infrastructure.Services.User
 
         public async Task<PostResponse> Create(CreateUserCommand command)
         {
-            string message = string.Empty;
-
             var user = Mapper.Map<UserDM>(command);
             var response = await Manager.CreateAsync(user, command.Password);
             if (response.Succeeded)
@@ -57,27 +55,36 @@ namespace Africuisine.Infrastructure.Services.User
                     if (response.Succeeded)
                     {
                         string token = await Manager.GenerateEmailConfirmationTokenAsync(user);
-                        command.HostUri += GenerateEmailConfirmationURI(token, user.Email);
-                        var postmarkRes = await Postmark.SendTemplateEmail(
-                            user,
-                            command.HostUri,
-                            "confirmation"
-                        );
-                        if (postmarkRes.Succeeded)
+                        try
                         {
-                            return new PostResponse
-                            {
-                                Message = "Your account was successfully created.",
-                                Succeeded = true
-                            };
+                            command.HostUri += GenerateEmailConfirmationURI(token, user.Email);
+                            // var postmarkRes = await Postmark.SendTemplateEmail(
+                            //     user,
+                            //     command.HostUri,
+                            //     "confirmation"
+                            // );
+                            // if (postmarkRes.Succeeded)
+                            // {
+                            //     return new PostResponse
+                            //     {
+                            //         Message = "Your account was successfully created.",
+                            //         Succeeded = true
+                            //     };
+                            // }
+                            return new PostResponse { Succeeded = true, Message = "Your account was successfully created."};
                         }
-                        await Manager.DeleteAsync(user);
-                        return new PostResponse { Message = "Account failed to be created. Please try again", Succeeded = false };
+                        catch (Exception ex)
+                        {
+                            Logger.Error($"An error occured while attempting to create an account. Error:{ex.Message}", ex);
+                            await Manager.DeleteAsync(user);
+                            return new PostResponse { Message = "Account failed to be created. Please try again", Succeeded = false };
+                        }
+                        
 
                     }
                 }
             }
-            message = GenerateErrorMessage(response.Errors);
+            string message = GenerateErrorMessage(response.Errors);
             return new PostResponse { Message = message };
         }
 
@@ -86,9 +93,10 @@ namespace Africuisine.Infrastructure.Services.User
             var user = await Manager.FindByEmailAsync(email);
             var profile = Mapper.Map<ProfileSM>(user);
 
-            dynamic role = (await Manager.GetRolesAsync(user)).First();
-            role = Mapper.Map<RoleSM>(role);
-            profile.Role = role;
+            string roleName = (await Manager.GetRolesAsync(user)).First();
+            var role = await RoleManager.FindByNameAsync(roleName);
+            var dtoRole = Mapper.Map<RoleSM>(role);
+            profile.Role = dtoRole;
             //!TODO - Retrieve Profile picture where status is activated
 
             return new QueryItemResponse<ProfileSM> { Succeeded = profile is not null, Item = profile };
@@ -96,7 +104,7 @@ namespace Africuisine.Infrastructure.Services.User
 
         private static string GenerateErrorMessage(IEnumerable<IdentityError> errors)
         {
-            return string.Format($"{Environment.NewLine} {errors.Select(err => err.Description)}");
+            return string.Format($"{Environment.NewLine}", errors.Select(err => err.Description));
         }
 
         public IEnumerable<Claim> GenerateClaims(UserDM user, RoleDM role)
@@ -119,7 +127,7 @@ namespace Africuisine.Infrastructure.Services.User
         {
             string encodeEmail = Uri.EscapeDataString(email);
             string encodedToken = Uri.UnescapeDataString(token);
-            return string.Format("/users?confirm?token={0}&email={1}", encodedToken, encodeEmail);
+            return string.Format("users/confirm?token={0}&email={1}", encodedToken, encodeEmail);
         }
 
         public async Task<PostResponse> ConfirmAccount(string email, string token)

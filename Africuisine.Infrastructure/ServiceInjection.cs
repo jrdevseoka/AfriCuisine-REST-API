@@ -10,6 +10,7 @@ using Asp.Versioning;
 using Africuisine.Infrastructure.Services.Error;
 using Africuisine.Infrastructure.Services.User;
 using Africuisine.Application.Interfaces.Log;
+using Africuisine.Infrastructure.Seeding;
 
 namespace Africuisine.Infrastructure
 {

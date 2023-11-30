@@ -13,7 +13,7 @@ namespace Africuisine.Application.Helpers.Mapping
         public void MapCreateUserCommandToUserDm()
         {
             CreateMap<CreateUserCommand, UserDM>()
-            .ForMember(dst => dst.EmailConfirmed, opts => opts.MapFrom(src => src.Confirmed));
+            .ForMember(dst => dst.UserName, opts => opts.MapFrom(src => src.Email));
         }
     }
 }

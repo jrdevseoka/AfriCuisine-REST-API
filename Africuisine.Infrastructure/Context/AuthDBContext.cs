@@ -14,11 +14,10 @@ public class AuthDBContext : IdentityDbContext<UserDM, RoleDM, string, UserClaim
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
-
-        // Your customizations here
+        base.OnModelCreating(builder);       
         builder.IdentityUserCustomization();
         builder.RoleIdentityCustomization();
+
     }
 }
 

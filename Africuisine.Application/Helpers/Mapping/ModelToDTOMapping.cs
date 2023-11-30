@@ -10,6 +10,8 @@ namespace Africuisine.Application.Helpers.Mapping
         public ModelToDTOMapping()
         {
              MapPictureDMToProfilePictureSM();
+             MapRoleDMToRoleSM();
+             MapUserDmToProfileSm();
         }
         public void MapPictureDMToProfilePictureSM()
         {
@@ -21,6 +23,10 @@ namespace Africuisine.Application.Helpers.Mapping
         public void MapRoleDMToRoleSM()
         {
             CreateMap<RoleDM, RoleSM>();
+        }
+        public void MapUserDmToProfileSm()
+        {
+             CreateMap<UserDM,ProfileSM>();
         }
     }
 }

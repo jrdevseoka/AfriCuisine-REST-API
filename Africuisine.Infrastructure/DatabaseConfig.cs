@@ -10,6 +10,7 @@ namespace Africuisine.Infrastructure
         {
             services.AddDbContext<AuthDBContext>(opts => {
                 opts.UseSqlServer(database.Connection);
+                opts.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
             });
             return services;
         }

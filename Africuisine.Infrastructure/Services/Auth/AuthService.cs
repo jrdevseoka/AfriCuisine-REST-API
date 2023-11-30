@@ -43,7 +43,7 @@ namespace Africuisine.Infrastructure.Services.Auth
                     };
                 }
             }
-            return new AuthResponse { Message = "", Succeeded = false };
+            return new AuthResponse { Message = "Invalid user credentials", Succeeded = false };
         }
     }
 }

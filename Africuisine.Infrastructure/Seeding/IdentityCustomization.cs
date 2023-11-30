@@ -23,6 +23,8 @@ namespace Africuisine.Infrastructure.Seeding
                 // A concurrency token for use with the optimistic concurrency checking
                 b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
+                b.Property(u => u.Id).ValueGeneratedOnAdd();
+
                 // Limit the size of columns to use efficient database types
                 b.Property(u => u.UserName).HasMaxLength(256);
                 b.Property(u => u.NormalizedUserName).HasMaxLength(256);
@@ -48,6 +50,7 @@ namespace Africuisine.Infrastructure.Seeding
             {
                 // Primary key
                 b.HasKey(uc => uc.Id);
+                b.Property(u => u.Id).ValueGeneratedOnAdd();
 
                 // Maps to the AspNetUserClaims table
                 b.ToTable("USERCLAIMS");
@@ -87,6 +90,7 @@ namespace Africuisine.Infrastructure.Seeding
             {
                 // Primary key
                 b.HasKey(r => r.Id);
+                b.Property(u => u.Id).ValueGeneratedOnAdd();
 
                 // Index for "normalized" role name to allow efficient lookups
                 b.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique();
@@ -114,6 +118,7 @@ namespace Africuisine.Infrastructure.Seeding
             {
                 // Primary key
                 b.HasKey(rc => rc.Id);
+                b.Property(u => u.Id).ValueGeneratedOnAdd();
 
                 // Maps to the AspNetRoleClaims table
                 b.ToTable("ROLECLAIMS");

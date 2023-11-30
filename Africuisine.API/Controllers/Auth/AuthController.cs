@@ -10,9 +10,6 @@ namespace Africuisine.API.Controllers.Auth
 {
     public class AuthController : APIBaseController<UserDM>
     {
-        public AuthController(IErrorService<UserDM> error)
-            : base(error) { }
-
         private readonly IAuthService Service;
 
         public AuthController(IAuthService service, IErrorService<UserDM> error)

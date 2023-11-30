@@ -23,13 +23,18 @@ JWTBearer jwtOptions = builder.Configuration.GetSection("JWT").Get<JWTBearer>();
 builder.Services.RegisterApplicationInjections();
 builder.Services.APIVersionInjection();
 builder.Services.RegisterOptionsConfigurations(builder.Configuration);
-builder.Services.RegisterIdentity();
 builder.Services.RegisterAuthInjections(jwtOptions);
-    builder.Services.RegisterDBContext(connection);
-builder.Services.RegisterServiceInjection();
+builder.Services.RegisterDBContext(connection);
+    builder.Services.RegisterIdentity();
+    builder.Services.RegisterServiceInjection();
 
 var app = builder.Build();
 
+app.UseCors(opts => {
+    opts.AllowAnyHeader();
+    opts.AllowAnyMethod();
+    opts.AllowAnyOrigin();
+});
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

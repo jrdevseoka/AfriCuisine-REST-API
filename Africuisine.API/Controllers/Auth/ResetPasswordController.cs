@@ -3,6 +3,7 @@ using Africuisine.Application.Commands.User;
 using Africuisine.Application.Interfaces.Auth;
 using Africuisine.Application.Interfaces.Error;
 using Africuisine.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Africuisine.API.Controllers.Auth
@@ -18,6 +19,7 @@ namespace Africuisine.API.Controllers.Auth
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Reset([FromQuery] string email)
         {
             try
@@ -34,6 +36,7 @@ namespace Africuisine.API.Controllers.Auth
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Add([FromBody] PasswordResetTokenCommand command)
         {
             try

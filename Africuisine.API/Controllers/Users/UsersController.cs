@@ -24,6 +24,7 @@ namespace Africuisine.API.Controllers.Users
         {
             try
             {
+                request.HostUri = GenerateUrl();
                 var response = await UserService.Create(request);
                 return Ok(response);
             }
@@ -33,17 +34,18 @@ namespace Africuisine.API.Controllers.Users
             }
         }
         [HttpGet("profile")]
-        [Authorize]
-        public async Task<IActionResult> Profile([FromQuery]string email)
+        [AllowAnonymous]
+        public async Task<IActionResult> Profile([FromQuery]string username)
         {
             try
             {
-                var response = await UserService.GetAuthenticatedUserDetails(email);
+                var response = await UserService.GetAuthenticatedUserDetails(username);
                 return Ok(response);
             }
             catch(Exception exception)
             {
-                return BadRequest(exception.Message);
+                var response = Error.MapErrorToItemResponse(exception);
+                return BadRequest(response);
             }
         }
     }
