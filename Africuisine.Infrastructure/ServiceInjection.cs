@@ -11,6 +11,8 @@ using Africuisine.Infrastructure.Services.Error;
 using Africuisine.Infrastructure.Services.User;
 using Africuisine.Application.Interfaces.Log;
 using Africuisine.Infrastructure.Seeding;
+using Africuisine.Application.Interfaces.Picture;
+using Africuisine.Infrastructure.Services.Picture;
 
 namespace Africuisine.Infrastructure
 {
@@ -24,7 +26,8 @@ namespace Africuisine.Infrastructure
             .AddSingleton(typeof(IErrorService<>), typeof(ErrorService<>))
             .AddScoped<IUserService, UserService>()
             .AddScoped<IAuthService, AuthService>()
-            .AddScoped<IJWTService, JWTService>();
+            .AddScoped<IJWTService, JWTService>()
+            .AddScoped<IPictureService, PictureService>();
             return services;
         }
         public static IServiceCollection APIVersionInjection(this IServiceCollection services)

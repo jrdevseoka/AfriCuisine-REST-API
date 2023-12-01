@@ -1,4 +1,5 @@
 using Africuisine.Application.Config;
+using Africuisine.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,10 @@ namespace Africuisine.Infrastructure
             services.AddDbContext<AuthDBContext>(opts => {
                 opts.UseSqlServer(database.Connection);
                 opts.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
+            });
+            services.AddDbContext<PictureDBContext>(opts => {
+                opts.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
+                opts.UseSqlServer(database.Connection);
             });
             return services;
         }

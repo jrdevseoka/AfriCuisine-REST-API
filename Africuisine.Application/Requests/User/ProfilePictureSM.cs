@@ -1,8 +1,8 @@
 namespace Africuisine.Application.Requests.User
 {
-    public class ProfilePictureSM
+    public class ProfilePictureSM : ServiceModelBase
     {
-        public string Path { get; set; }
-        public string Type { get; set; }
+        public bool Activated { get; set; }
+        public string LPicture { get; set; }
     }
 }

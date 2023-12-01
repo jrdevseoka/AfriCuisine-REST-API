@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Africuisine.Application.Commands.Picture;
 using Africuisine.Application.Commands.User;
 using Africuisine.Application.Config;
 using Africuisine.Application.Interfaces.Auth;
@@ -7,6 +8,7 @@ using Africuisine.Application.Interfaces.User;
 using Africuisine.Application.Requests.User;
 using Africuisine.Application.Res;
 using Africuisine.Domain.Models;
+using Africuisine.Domain.Models.Pictures;
 using Africuisine.Infrastructure.Services.Postmark;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -143,6 +145,21 @@ namespace Africuisine.Infrastructure.Services.User
                 return new PostResponse { Succeeded = response.Succeeded, Message = message };
             }
             return new PostResponse { Succeeded = false, Message = message };
+        }
+
+        public Task<QueryItemResponse<ProfilePictureSM>> SetProfilePicture(CreatePictureCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<PostResponse> IUserService.SetProfilePicture(CreatePictureCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<QueryItemResponse<PictureDM>> IUserService.ConfirmAccount(string email, string token)
+        {
+            throw new NotImplementedException();
         }
     }
 }
