@@ -4,13 +4,18 @@ using Africuisine.Application.Commands.User;
 using Africuisine.Application.Config;
 using Africuisine.Application.Interfaces.Auth;
 using Africuisine.Application.Interfaces.Log;
+using Africuisine.Application.Interfaces.Picture;
 using Africuisine.Application.Interfaces.User;
 using Africuisine.Application.Requests.User;
 using Africuisine.Application.Res;
 using Africuisine.Domain.Models;
 using Africuisine.Domain.Models.Pictures;
+using Africuisine.Infrastructure.Context;
 using Africuisine.Infrastructure.Services.Postmark;
 using AutoMapper;
+using Azure;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
@@ -18,6 +23,7 @@ namespace Africuisine.Infrastructure.Services.User
 {
     public class UserService : BaseService, IUserService
     {
+        private readonly IPictureService PictureService;
         private readonly UserManager<UserDM> Manager;
         private readonly RoleManager<RoleDM> RoleManager;
         private readonly IPostmarkService Postmark;
@@ -31,7 +37,8 @@ namespace Africuisine.Infrastructure.Services.User
             UserManager<UserDM> manager,
             RoleManager<RoleDM> roleManager,
             IPostmarkService postmark,
-            IJWTService jWTService)
+            IJWTService jWTService,
+            IPictureService pictureService)
             : base(logger, mapper)
         {
             Manager = manager;
@@ -39,6 +46,7 @@ namespace Africuisine.Infrastructure.Services.User
             JWT = options.Value;
             Postmark = postmark;
             JWTService = jWTService;
+            PictureService = pictureService;
         }
 
         public async Task<PostResponse> Create(CreateUserCommand command)
@@ -99,8 +107,9 @@ namespace Africuisine.Infrastructure.Services.User
             var role = await RoleManager.FindByNameAsync(roleName);
             var dtoRole = Mapper.Map<RoleSM>(role);
             profile.Role = dtoRole;
-            //!TODO - Retrieve Profile picture where status is activated
-
+            var picture = await PictureService.GetActivatedProfilePic(user);
+            var profilePic = Mapper.Map<ProfilePictureSM>(picture);
+            profile.ProfilePicture = profilePic;
             return new QueryItemResponse<ProfileSM> { Succeeded = profile is not null, Item = profile };
         }
 
@@ -147,19 +156,39 @@ namespace Africuisine.Infrastructure.Services.User
             return new PostResponse { Succeeded = false, Message = message };
         }
 
-        public Task<QueryItemResponse<ProfilePictureSM>> SetProfilePicture(CreatePictureCommand command)
+        public async Task<PostResponse> SetProfilePicture(CreatePictureCommand command)
         {
-            throw new NotImplementedException();
-        }
-
-        Task<PostResponse> IUserService.SetProfilePicture(CreatePictureCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<QueryItemResponse<PictureDM>> IUserService.ConfirmAccount(string email, string token)
-        {
-            throw new NotImplementedException();
+            using(var transaction = await PictureService.StartTransaction())
+            {
+                try
+                {
+                    var picResponse = await PictureService.Create(command);
+                    if(picResponse.Succeeded)
+                    {
+                        var ppResponse = await PictureService.AddToUser(picResponse.Item);
+                        if(ppResponse.Succeeded)
+                        {
+                            var user = await Manager.FindByIdAsync(command.LUser);
+                            var response = await GetAuthenticatedUserDetails(user.Email);
+                            if(response.Succeeded)
+                            {
+                                await transaction.CommitAsync();
+                                int rows = await PictureService.Save();
+                                await transaction.DisposeAsync();
+                                return new PostResponse{ Message = "You have successfully added a new picture.", Succeeded = rows > 0 };
+                            }
+                        }
+                        
+                    }
+                    throw new BadHttpRequestException("An unexpected error occured while uploading a profile picture");
+                }
+                catch(Exception e)
+                { 
+                     Logger.Warn(e.Message);
+                     await transaction.RollbackAsync();
+                     return new PostResponse { };
+                }
+            }
         }
     }
-}
+}    

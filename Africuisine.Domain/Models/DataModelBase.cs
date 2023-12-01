@@ -9,7 +9,7 @@ namespace Africuisine.Domain.Models
         public string Link { get; set; }
         public DateTime Creation { get; set; }
         public DateTime LastUpdate { get; set; }
-        public DateTime LUserUpdate { get; set; }
+        public string LUserUpdate { get; set; }
         public int SeqNo { get; set; }
         [ForeignKey(nameof(LUserUpdate))]
         public UserDM User { get; set; }

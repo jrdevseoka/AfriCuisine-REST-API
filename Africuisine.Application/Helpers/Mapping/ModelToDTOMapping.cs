@@ -1,4 +1,5 @@
 using Africuisine.Application.Requests;
+using Africuisine.Application.Requests.Picture;
 using Africuisine.Application.Requests.User;
 using Africuisine.Domain.Models;
 using Africuisine.Domain.Models.Pictures;
@@ -11,6 +12,7 @@ namespace Africuisine.Application.Helpers.Mapping
         public ModelToDTOMapping()
         {
             MapServiceModelBaseToDataModelBase();
+            MapPictureDmToPictureSm();
             MapPictureDMToProfilePictureSM();
             MapRoleDMToRoleSM();
             MapUserDmToProfileSm();
@@ -19,6 +21,7 @@ namespace Africuisine.Application.Helpers.Mapping
         public void MapPictureDMToProfilePictureSM()
         {
             CreateMap<ProfilePictureDM, ProfilePictureSM>()
+                .ForMember(dst => dst.Picture, opts => opts.MapFrom(src => src.Picture))
                 .IncludeBase<DataModelBase, ServiceModelBase>();
         }
 
@@ -40,6 +43,11 @@ namespace Africuisine.Application.Helpers.Mapping
         public void MapUserDmToProfileSm()
         {
             CreateMap<UserDM, ProfileSM>()
+            .IncludeBase<DataModelBase, ServiceModelBase>();
+        }
+        public void MapPictureDmToPictureSm()
+        {
+            CreateMap<PictureDM, PictureSM>()
             .IncludeBase<DataModelBase, ServiceModelBase>();
         }
     }
