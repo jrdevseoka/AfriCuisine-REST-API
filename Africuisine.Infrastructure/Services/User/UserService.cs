@@ -186,7 +186,7 @@ namespace Africuisine.Infrastructure.Services.User
                 { 
                      Logger.Warn(e.Message);
                      await transaction.RollbackAsync();
-                     return new PostResponse { };
+                     return new PostResponse {Succeeded = false, Message = e.Message };
                 }
             }
         }
