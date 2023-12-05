@@ -36,14 +36,12 @@ namespace Africuisine.Application.Helpers.Mapping
 
         public void MapRoleDMToRoleSM()
         {
-            CreateMap<RoleDM, RoleSM>()
-            .IncludeBase<DataModelBase, ServiceModelBase>();
+            CreateMap<RoleDM, RoleSM>();
         }
 
         public void MapUserDmToProfileSm()
         {
-            CreateMap<UserDM, ProfileSM>()
-            .IncludeBase<DataModelBase, ServiceModelBase>();
+            CreateMap<UserDM, ProfileSM>();
         }
         public void MapPictureDmToPictureSm()
         {

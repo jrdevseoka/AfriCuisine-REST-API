@@ -7,8 +7,6 @@ using Africuisine.Application.Res;
 using Africuisine.Domain.Models.Pictures;
 using Africuisine.Infrastructure.Context;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Africuisine.Application.Requests.User;
 using Microsoft.EntityFrameworkCore;
 using Africuisine.Domain.Models;
 

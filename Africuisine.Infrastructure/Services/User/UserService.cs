@@ -107,9 +107,9 @@ namespace Africuisine.Infrastructure.Services.User
             var role = await RoleManager.FindByNameAsync(roleName);
             var dtoRole = Mapper.Map<RoleSM>(role);
             profile.Role = dtoRole;
-            var picture = await PictureService.GetActivatedProfilePic(user);
-            var profilePic = Mapper.Map<ProfilePictureSM>(picture);
-            profile.ProfilePicture = profilePic;
+            // var picture = await PictureService.GetActivatedProfilePic(user);
+            // var profilePic = Mapper.Map<ProfilePictureSM>(picture);
+            // profile.ProfilePicture = profilePic;
             return new QueryItemResponse<ProfileSM> { Succeeded = profile is not null, Item = profile };
         }
 
