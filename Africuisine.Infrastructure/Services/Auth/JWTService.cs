@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Africuisine.Domain.Models;
+using Africuisine.Application.Requests.User;
 
 namespace Africuisine.Infrastructure.Services.Auth
 {
@@ -35,15 +36,15 @@ namespace Africuisine.Infrastructure.Services.Auth
             return tokenHandler.WriteToken(token);
         }
 
-        public IEnumerable<Claim> GenerateClaims(UserDM user, string roleName)
+        public IEnumerable<Claim> GenerateClaims(ProfileSM user)
         {
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, user.Id),
                 new(ClaimTypes.Email, user.Email),
                 new(ClaimTypes.Name, user.Name),
-                new("role", roleName),
-                new("sub", user.Id),
+                new(ClaimTypes.Role, user.Role),
+                new("exp", DateTime.UtcNow.AddHours(5).ToLongDateString()),
                 new("aud", JWT.ValidAudience),
                 new("jti", Guid.NewGuid().ToString()),
             };

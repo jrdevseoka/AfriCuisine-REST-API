@@ -33,20 +33,5 @@ namespace Africuisine.API.Controllers.Users
                 return BadRequest(exception.Message);
             }
         }
-        [HttpGet("profile")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Profile([FromQuery]string username)
-        {
-            try
-            {
-                var response = await UserService.GetAuthenticatedUserDetails(username);
-                return Ok(response);
-            }
-            catch(Exception exception)
-            {
-                var response = Error.MapErrorToItemResponse(exception);
-                return BadRequest(response);
-            }
-        }
     }
 }

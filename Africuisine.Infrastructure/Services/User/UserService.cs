@@ -34,7 +34,8 @@ namespace Africuisine.Infrastructure.Services.User
             RoleManager<RoleDM> roleManager,
             IPostmarkService postmark,
             IJWTService jWTService,
-            IPictureService pictureService)
+            IPictureService pictureService
+        )
             : base(logger, mapper)
         {
             Manager = manager;
@@ -51,42 +52,32 @@ namespace Africuisine.Infrastructure.Services.User
             var response = await Manager.CreateAsync(user, command.Password);
             if (response.Succeeded)
             {
-                //Add User to role
                 var role = await RoleManager.FindByIdAsync(command.LRole);
                 response = await Manager.AddToRoleAsync(user, role.Name);
                 if (response.Succeeded)
                 {
-                    var claims = JWTService.GenerateClaims(user, role.Name);
-                    response = await Manager.AddClaimsAsync(user, claims);
-                    if (response.Succeeded)
+                    string token = await Manager.GenerateEmailConfirmationTokenAsync(user);
+                    try
                     {
-                        string token = await Manager.GenerateEmailConfirmationTokenAsync(user);
-                        try
+                        command.HostUri += GenerateEmailConfirmationURI(token, user.Email);
+                        return new PostResponse
                         {
-                            command.HostUri += GenerateEmailConfirmationURI(token, user.Email);
-                            // var postmarkRes = await Postmark.SendTemplateEmail(
-                            //     user,
-                            //     command.HostUri,
-                            //     "confirmation"
-                            // );
-                            // if (postmarkRes.Succeeded)
-                            // {
-                            //     return new PostResponse
-                            //     {
-                            //         Message = "Your account was successfully created.",
-                            //         Succeeded = true
-                            //     };
-                            // }
-                            return new PostResponse { Succeeded = true, Message = "Your account was successfully created."};
-                        }
-                        catch (Exception ex)
+                            Succeeded = true,
+                            Message = "Your account was successfully created."
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(
+                            $"An error occured while attempting to create an account. Error:{ex.Message}",
+                            ex
+                        );
+                        await Manager.DeleteAsync(user);
+                        return new PostResponse
                         {
-                            Logger.Error($"An error occured while attempting to create an account. Error:{ex.Message}", ex);
-                            await Manager.DeleteAsync(user);
-                            return new PostResponse { Message = "Account failed to be created. Please try again", Succeeded = false };
-                        }
-                        
-
+                            Message = "Account failed to be created. Please try again",
+                            Succeeded = false
+                        };
                     }
                 }
             }
@@ -98,15 +89,14 @@ namespace Africuisine.Infrastructure.Services.User
         {
             var user = await Manager.FindByEmailAsync(email);
             var profile = Mapper.Map<ProfileSM>(user);
-
-            string roleName = (await Manager.GetRolesAsync(user)).First();
-            var role = await RoleManager.FindByNameAsync(roleName);
-            var dtoRole = Mapper.Map<RoleSM>(role);
-            profile.Role = dtoRole;
             // var picture = await PictureService.GetActivatedProfilePic(user);
-            // var profilePic = Mapper.Map<ProfilePictureSM>(picture);
-            // profile.ProfilePicture = profilePic;
-            return new QueryItemResponse<ProfileSM> { Succeeded = profile is not null, Item = profile };
+            // profile.PictureUri = picture.Picture.Url;
+            profile.Role = (await Manager.GetRolesAsync(user)).First();
+            return new QueryItemResponse<ProfileSM>
+            {
+                Succeeded = profile is not null,
+                Item = profile
+            };
         }
 
         private static string GenerateErrorMessage(IEnumerable<IdentityError> errors)
@@ -117,15 +107,15 @@ namespace Africuisine.Infrastructure.Services.User
         public IEnumerable<Claim> GenerateClaims(UserDM user, RoleDM role)
         {
             var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Email, user.Email),
-            new(ClaimTypes.Name, user.Name),
-            new("role", role.Name),
-            new("sub", user.Id),
-            new("aud", JWT.ValidAudience),
-            new("jti", Guid.NewGuid().ToString()),
-        };
+            {
+                new(ClaimTypes.NameIdentifier, user.Id),
+                new(ClaimTypes.Email, user.Email),
+                new(ClaimTypes.Name, user.Name),
+                new("role", role.Name),
+                new("sub", user.Id),
+                new("aud", JWT.ValidAudience),
+                new("jti", Guid.NewGuid().ToString()),
+            };
 
             return claims;
         }
@@ -154,37 +144,42 @@ namespace Africuisine.Infrastructure.Services.User
 
         public async Task<PostResponse> SetProfilePicture(CreatePictureCommand command)
         {
-            using(var transaction = await PictureService.StartTransaction())
+            using (var transaction = await PictureService.StartTransaction())
             {
                 try
                 {
                     var picResponse = await PictureService.Create(command);
-                    if(picResponse.Succeeded)
+                    if (picResponse.Succeeded)
                     {
                         var ppResponse = await PictureService.AddToUser(picResponse.Item);
-                        if(ppResponse.Succeeded)
+                        if (ppResponse.Succeeded)
                         {
                             var user = await Manager.FindByIdAsync(command.LUser);
                             var response = await GetAuthenticatedUserDetails(user.Email);
-                            if(response.Succeeded)
+                            if (response.Succeeded)
                             {
                                 await transaction.CommitAsync();
                                 int rows = await PictureService.Save();
                                 await transaction.DisposeAsync();
-                                return new PostResponse{ Message = "You have successfully added a new picture.", Succeeded = rows > 0 };
+                                return new PostResponse
+                                {
+                                    Message = "You have successfully added a new picture.",
+                                    Succeeded = rows > 0
+                                };
                             }
                         }
-                        
                     }
-                    throw new BadHttpRequestException("An unexpected error occured while uploading a profile picture");
+                    throw new BadHttpRequestException(
+                        "An unexpected error occured while uploading a profile picture"
+                    );
                 }
-                catch(Exception e)
-                { 
-                     Logger.Warn(e.Message);
-                     await transaction.RollbackAsync();
-                     return new PostResponse {Succeeded = false, Message = e.Message };
+                catch (Exception e)
+                {
+                    Logger.Warn(e.Message);
+                    await transaction.RollbackAsync();
+                    return new PostResponse { Succeeded = false, Message = e.Message };
                 }
             }
         }
     }
-}    
+}

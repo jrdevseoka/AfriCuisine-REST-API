@@ -20,12 +20,12 @@ namespace Africuisine.API.Controllers.Auth
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Reset([FromQuery] string email)
+        public async Task<IActionResult> Reset([FromBody] ForgotPasswordCommand command)
         {
             try
             {
                 string uri = GenerateUrl();
-                var response = await PasswordService.GetResetPasswordToken(email, uri);
+                var response = await PasswordService.GetResetPasswordToken(command);
                 return Ok(response);
             }
             catch (Exception exception)
@@ -37,7 +37,7 @@ namespace Africuisine.API.Controllers.Auth
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Add([FromBody] PasswordResetTokenCommand command)
+        public async Task<IActionResult> Update([FromBody] PasswordResetTokenCommand command)
         {
             try
             {
