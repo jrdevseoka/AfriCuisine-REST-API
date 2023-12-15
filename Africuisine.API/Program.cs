@@ -2,6 +2,7 @@ using Africuisine.Application;
 using Africuisine.Application.Config;
 using Africuisine.Infrastructure;
 using Africuisine.Infrastructure.Helpers;
+using Africuisine.Infrastructure.Helpers.Middleware;
 using NLog;
 
 var Logger = LogManager.Setup().LoadConfigurationFromFile("NLog.config").GetCurrentClassLogger();
@@ -29,6 +30,8 @@ builder.Services.RegisterDBContext(connection);
     builder.Services.RegisterServiceInjection();
 
 var app = builder.Build();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseCors(opts => {
     opts.AllowAnyHeader();

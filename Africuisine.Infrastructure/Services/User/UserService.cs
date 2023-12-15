@@ -9,13 +9,9 @@ using Africuisine.Application.Interfaces.User;
 using Africuisine.Application.Requests.User;
 using Africuisine.Application.Res;
 using Africuisine.Domain.Models;
-using Africuisine.Domain.Models.Pictures;
-using Africuisine.Infrastructure.Context;
 using Africuisine.Infrastructure.Services.Postmark;
 using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
