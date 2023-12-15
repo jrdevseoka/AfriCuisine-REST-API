@@ -1,5 +1,8 @@
 using Africuisine.Application.Commands.Picture;
 using Africuisine.Application.Commands.User;
+using Africuisine.Application.DTO;
+using Africuisine.Domain;
+using Africuisine.Domain.Ingredients;
 using Africuisine.Domain.Models;
 using Africuisine.Domain.Models.Pictures;
 using AutoMapper;
@@ -10,6 +13,7 @@ namespace Africuisine.Application.Helpers.Mapping
     {
         public CommandMappingProfile()
         {
+            MapDataModelBaseToDTOModelBase();
             MapCreateUserCommandToUserDm();
             MapCreaterictureCommandToUserDm();
         }
@@ -28,6 +32,22 @@ namespace Africuisine.Application.Helpers.Mapping
         {
             CreateMap<PictureDM, ProfilePictureDM>()
             .ForMember(dst => dst.LUserUpdate, opts => opts.MapFrom(src => src.LUserUpdate));
+        }
+        public void MapDataModelBaseToDTOModelBase(){
+            CreateMap<DataModelBase, DTOModelBase>()
+            .ForMember(dst => dst.Id, opts => opts.MapFrom(src => src.Link))
+            .ForMember(dst => dst.LastModified, opts => opts.MapFrom(src => src.LastUpdate))
+            .ForMember(dst => dst.Created, opts => opts.MapFrom(src => src.Creation))
+            .ForMember(dst => dst.LUserUpdate, opts => opts.MapFrom(src => src.LUserUpdate))
+            .ForMember(dst => dst.Updated, opts => opts.MapFrom(src => src.SeqNo));
+        }
+        public void MapIngredientCategoriesDMToDTO() {
+            CreateMap<IngredientCategoryDM, IngredientCategoryDTO>()
+            .IncludeBase<DataModelBase, DTOModelBase>();
+        }
+        public void MapIngredientDMToDTO() {
+            CreateMap<IngredientDM, IngredientDTO>()
+            .IncludeBase<DataModelBase, DTOModelBase>();
         }
     }
 }
