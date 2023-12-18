@@ -18,13 +18,11 @@ namespace Africuisine.API.Controllers.Auth
             PasswordService = passwordService;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpPost("send-email")]
         public async Task<IActionResult> Reset([FromBody] ForgotPasswordCommand command)
         {
             try
             {
-                string uri = GenerateUrl();
                 var response = await PasswordService.GetResetPasswordToken(command);
                 return Ok(response);
             }
@@ -35,7 +33,7 @@ namespace Africuisine.API.Controllers.Auth
             }
         }
 
-        [HttpPost]
+        [HttpPost("update")]
         [AllowAnonymous]
         public async Task<IActionResult> Update([FromBody] PasswordResetTokenCommand command)
         {

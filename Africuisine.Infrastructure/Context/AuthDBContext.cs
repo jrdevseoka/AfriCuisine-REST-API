@@ -17,7 +17,6 @@ public class AuthDBContext : IdentityDbContext<UserDM, RoleDM, string, UserClaim
         base.OnModelCreating(builder);       
         builder.IdentityUserCustomization();
         builder.RoleIdentityCustomization();
-
     }
 }
 

@@ -27,6 +27,7 @@ namespace Africuisine.Infrastructure
             .AddScoped<IUserService, UserService>()
             .AddScoped<IAuthService, AuthService>()
             .AddScoped<IJWTService, JWTService>()
+            .AddScoped<IPasswordService, PasswordService>()
             .AddScoped<IPictureService, PictureService>();
             return services;
         }

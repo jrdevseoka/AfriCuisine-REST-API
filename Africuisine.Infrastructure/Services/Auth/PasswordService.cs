@@ -1,4 +1,5 @@
 using System.Net;
+using System.Web;
 using Africuisine.Application.Commands.User;
 using Africuisine.Application.Exceptions;
 using Africuisine.Application.Interfaces.Auth;
@@ -26,9 +27,9 @@ namespace Africuisine.Infrastructure.Services.Auth
             if (user is not null)
             {
                 var token = await UserManager.GeneratePasswordResetTokenAsync(user);
-                string URI = $"auth/reset-password?token={token}";
+                string URI = $"/reset-password?token={ HttpUtility.UrlEncode(token)}";
                 command.Uri += command.Uri.EndsWith('/') ? $"{URI}" : $"/{URI}";
-                var response = await Postmark.SendTemplateEmail(user, token, "reset-password");
+                var response = await Postmark.SendTemplateEmail(user, command.Uri, "forgot-password");
                 return new AuthResponse
                 {
                     Succeeded = response.Succeeded,

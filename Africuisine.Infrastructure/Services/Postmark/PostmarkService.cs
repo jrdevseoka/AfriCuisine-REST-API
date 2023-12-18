@@ -33,13 +33,13 @@ class PostmarkService : IPostmarkService
         string template
     )
     {
-        var templatModel = GetTemplateModel(Sender, recipient.Name, url);
+        var templateModel = GetTemplateModel(Sender, recipient.Name, url);
         return new TemplatedPostmarkMessage
         {
             From = Sender.SenderEmail,
             TemplateAlias = template.ToLower(),
             To = recipient.Email,
-            TemplateModel = templatModel
+            TemplateModel = templateModel
         };
     }
 
