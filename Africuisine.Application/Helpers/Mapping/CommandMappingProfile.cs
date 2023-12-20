@@ -16,6 +16,8 @@ namespace Africuisine.Application.Helpers.Mapping
             MapDataModelBaseToDTOModelBase();
             MapCreateUserCommandToUserDm();
             MapCreaterictureCommandToUserDm();
+            MapCreateCategoryCommandToIngrCategory();
+            MapCreateIngridientCommandToIngredient();
         }
         public void MapCreateUserCommandToUserDm()
         {
@@ -44,6 +46,14 @@ namespace Africuisine.Application.Helpers.Mapping
         public void MapIngredientCategoriesDMToDTO() {
             CreateMap<IngredientCategoryDM, IngredientCategoryDTO>()
             .IncludeBase<DataModelBase, DTOModelBase>();
+        }
+        public void MapCreateCategoryCommandToIngrCategory()
+        {
+            CreateMap<CreateCategoryCommand, IngredientCategoryDM>();
+        }
+        public void MapCreateIngridientCommandToIngredient()
+        {
+            CreateMap<CreateIngredientsCommand, IngredientDM>();
         }
         public void MapIngredientDMToDTO() {
             CreateMap<IngredientDM, IngredientDTO>()

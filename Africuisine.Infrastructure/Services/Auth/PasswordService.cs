@@ -27,7 +27,7 @@ namespace Africuisine.Infrastructure.Services.Auth
             if (user is not null)
             {
                 var token = await UserManager.GeneratePasswordResetTokenAsync(user);
-                string URI = $"/reset-password?token={ HttpUtility.UrlEncode(token)}";
+                string URI = $"auth/reset-password?token={ HttpUtility.UrlEncode(token)}";
                 command.Uri += command.Uri.EndsWith('/') ? $"{URI}" : $"/{URI}";
                 var response = await Postmark.SendTemplateEmail(user, command.Uri, "forgot-password");
                 return new AuthResponse

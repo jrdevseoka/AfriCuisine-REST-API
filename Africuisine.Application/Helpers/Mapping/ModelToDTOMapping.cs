@@ -1,6 +1,7 @@
 using Africuisine.Application.Requests;
 using Africuisine.Application.Requests.Picture;
 using Africuisine.Application.Requests.User;
+using Africuisine.Domain.Ingredients;
 using Africuisine.Domain.Models;
 using Africuisine.Domain.Models.Pictures;
 using AutoMapper;
@@ -16,6 +17,12 @@ namespace Africuisine.Application.Helpers.Mapping
             MapPictureDMToProfilePictureSM();
             MapRoleDMToRoleSM();
             MapUserDmToProfileSm();
+        }
+        public void MapIngredientDTOToIngredientDm()
+        {
+            CreateMap<IngredientCategoryDTO, IngredientCategoryDM>()
+            .IncludeBase<DTOModelBase, IngredientCategoryDM>()
+            .ReverseMap();
         }
 
         public void MapPictureDMToProfilePictureSM()

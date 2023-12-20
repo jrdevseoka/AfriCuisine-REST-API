@@ -22,17 +22,16 @@ namespace Africuisine.Infrastructure.Services.Auth
         public string GenerateJWTToken(IEnumerable<Claim> claims)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWT.Key));
-
-            var descriptor = new SecurityTokenDescriptor
-            {
-                Issuer = JWT.ValidIssuer,
-                Audience = JWT.ValidAudience,
-                Expires = DateTime.UtcNow.AddHours(5),
-                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256),
-                Subject = new ClaimsIdentity(claims),
-            };
+            
             var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateJwtSecurityToken(descriptor);
+            var token  = tokenHandler.CreateJwtSecurityToken(
+                issuer: JWT.ValidIssuer,
+                audience: JWT.ValidAudience,
+                issuedAt: DateTime.UtcNow,
+                subject: new ClaimsIdentity(claims),
+                expires: DateTime.UtcNow.AddHours(4),
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+                
             return tokenHandler.WriteToken(token);
         }
 

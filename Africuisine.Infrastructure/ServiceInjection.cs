@@ -13,6 +13,7 @@ using Africuisine.Application.Interfaces.Log;
 using Africuisine.Infrastructure.Seeding;
 using Africuisine.Application.Interfaces.Picture;
 using Africuisine.Infrastructure.Services.Picture;
+using Africuisine.Infrastructure.Helpers.Utils;
 
 namespace Africuisine.Infrastructure
 {
@@ -21,6 +22,7 @@ namespace Africuisine.Infrastructure
         public static IServiceCollection RegisterServiceInjection(this IServiceCollection services)
         {
             services
+            .AddTransient<ISave, Save>()
             .AddScoped<IPostmarkService, PostmarkService>()
             .AddSingleton<INLogger, NLogger>()
             .AddSingleton(typeof(IErrorService<>), typeof(ErrorService<>))
