@@ -10,10 +10,10 @@ namespace Africuisine.Application.Interfaces.Recipe
     {
         Task<PostResponse> Create(CreateRecipeCommand command);
         Task<QueryItemsResponse<RecipeDTO>> GetRecipes();
-        Task<QueryItemsResponse<RecipeDTO>> GetRecipeById(string id);
-        Task<QueryItemsResponse<RecipeDTO>> GetRecipeByCategory(string category);
+        Task<QueryItemResponse<RecipeDTO>> GetRecipeById(string id);
+        Task<QueryItemsResponse<RecipeDTO>> GetRecipeByCategory(string id);
         Task<QueryItemsResponse<RecipeDTO>> GetRecipeByPopularity(string rating);
         Task<PostResponse> Update(RecipeDTO recipe);
-        Task<PostResponse> Delete(string id);
+        Task<PostResponse> Delete(RecipeDTO recipe);
     }
 }

@@ -56,7 +56,7 @@ namespace Africuisine.Infrastructure.Migrations.RecipeDB
                         .IsUnique()
                         .HasFilter("[Name] IS NOT NULL");
 
-                    b.ToTable("PICTURES");
+                    b.ToTable("PICTURES", (string)null);
                 });
 
             modelBuilder.Entity("Africuisine.Domain.Models.Pictures.ProfilePictureDM", b =>
@@ -88,7 +88,7 @@ namespace Africuisine.Infrastructure.Migrations.RecipeDB
 
                     b.HasIndex("LUserUpdate");
 
-                    b.ToTable("PROFILEPICTURES");
+                    b.ToTable("PROFILEPICTURES", (string)null);
                 });
 
             modelBuilder.Entity("Africuisine.Domain.Models.Recipes.InstructionDM", b =>
@@ -120,7 +120,7 @@ namespace Africuisine.Infrastructure.Migrations.RecipeDB
 
                     b.HasIndex("LUserUpdate");
 
-                    b.ToTable("RECINSTRUCTIONS");
+                    b.ToTable("RECINSTRUCTIONS", (string)null);
                 });
 
             modelBuilder.Entity("Africuisine.Domain.Models.Recipes.RecipeCategoryDM", b =>
@@ -144,7 +144,7 @@ namespace Africuisine.Infrastructure.Migrations.RecipeDB
 
                     b.HasIndex("LUserUpdate");
 
-                    b.ToTable("RECCATEGORIES");
+                    b.ToTable("RECCATEGORIES", (string)null);
                 });
 
             modelBuilder.Entity("Africuisine.Domain.Models.Recipes.RecipeDM", b =>
@@ -187,7 +187,7 @@ namespace Africuisine.Infrastructure.Migrations.RecipeDB
 
                     b.HasIndex("LUserUpdate");
 
-                    b.ToTable("RECIPES");
+                    b.ToTable("RECIPES", (string)null);
                 });
 
             modelBuilder.Entity("Africuisine.Domain.Models.Recipes.RecipeLevelDM", b =>
@@ -222,7 +222,7 @@ namespace Africuisine.Infrastructure.Migrations.RecipeDB
                         .IsUnique()
                         .HasDatabaseName("IX_RecDifficulty_Name");
 
-                    b.ToTable("RECDIFFICULTY");
+                    b.ToTable("RECDIFFICULTY", (string)null);
 
                     b.HasData(
                         new
@@ -282,7 +282,7 @@ namespace Africuisine.Infrastructure.Migrations.RecipeDB
 
                     b.HasIndex("LUserUpdate");
 
-                    b.ToTable("RECPICTURES");
+                    b.ToTable("RECPICTURES", (string)null);
                 });
 
             modelBuilder.Entity("Africuisine.Domain.Models.UserDM", b =>
@@ -337,7 +337,7 @@ namespace Africuisine.Infrastructure.Migrations.RecipeDB
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserDM");
+                    b.ToTable("UserDM", (string)null);
                 });
 
             modelBuilder.Entity("Africuisine.Domain.Models.Pictures.PictureDM", b =>

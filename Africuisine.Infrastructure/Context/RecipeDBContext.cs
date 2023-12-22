@@ -1,3 +1,4 @@
+using Africuisine.Domain.Models.Pictures;
 using Africuisine.Domain.Models.Recipes;
 using Africuisine.Infrastructure.Seeding;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,8 @@ namespace Africuisine.Infrastructure.Context
     {
         private readonly ISave Save;
         public DbSet<RecipeDM> Recipes { get; set; }
+        public DbSet<RecipePictureDM> RecipePictures { get; set; }  
+        public DbSet<PictureDM> Pictures { get; set; }  
         public DbSet<RecipeCategoryDM> RecipeCategories { get; set; }
         public DbSet<RecipeLevelDM> RecipeLevels { get; set; }
         public DbSet<InstructionDM> Instructions { get; set; }
