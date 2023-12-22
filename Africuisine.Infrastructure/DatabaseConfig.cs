@@ -21,6 +21,10 @@ namespace Africuisine.Infrastructure
                 opts.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
                 opts.UseSqlServer(database.Connection);
             });
+            services.AddDbContext<RecipeDBContext>(opts => {
+                opts.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
+                opts.UseSqlServer(database.Connection);
+            });
             return services;
         }
     }

@@ -1,4 +1,5 @@
-﻿using Africuisine.Domain.Models;
+﻿using Africuisine.Domain.Enum;
+using Africuisine.Domain.Models;
 using Africuisine.Domain.Models.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -113,6 +114,9 @@ namespace Africuisine.Infrastructure.Seeding
 
                 // Each Role can have many associated RoleClaims
                 b.HasMany<RoleClaimDM>().WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
+
+                var roles = GenerateRoles().ToArray();
+                b.HasData(roles);
             });
             builder.Entity<RoleClaimDM>(b =>
             {
@@ -134,5 +138,17 @@ namespace Africuisine.Infrastructure.Seeding
             });
             return builder;
         }
+        private static List<RoleDM> GenerateRoles()
+        {
+            List<RoleDM> roles = new();
+            var names =  Enum.GetNames(typeof(ERole));
+            foreach(string name in names)
+            {
+               var role = new RoleDM { Id=Guid.NewGuid().ToString(), Name = name, NormalizedName = name.ToUpper(), ConcurrencyStamp =  Guid.NewGuid().ToString()};
+               roles.Add(role);
+            }
+            return roles;
+        }
     }
 }
+ 

@@ -48,6 +48,29 @@ namespace Africuisine.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("ROLES", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "b1410ddd-d4c9-44a6-aeb2-bd00ac2a3a03",
+                            ConcurrencyStamp = "1d60d4a5-b2b7-44b3-b978-4b806147523b",
+                            Name = "Super",
+                            NormalizedName = "SUPER"
+                        },
+                        new
+                        {
+                            Id = "d65f9a81-ad4a-4669-93df-c00f7b653885",
+                            ConcurrencyStamp = "55b0454b-3e8b-4e78-8e1b-445a4a93db52",
+                            Name = "Restricted",
+                            NormalizedName = "RESTRICTED"
+                        },
+                        new
+                        {
+                            Id = "9322247b-70ef-4bad-a57a-3b6cf1604570",
+                            ConcurrencyStamp = "3f883c78-c6c8-43d5-be6e-a621835fcb8c",
+                            Name = "Mobile",
+                            NormalizedName = "MOBILE"
+                        });
                 });
 
             modelBuilder.Entity("Africuisine.Domain.Models.User.RoleClaimDM", b =>

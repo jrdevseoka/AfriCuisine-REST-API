@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using Africuisine.Domain.Models;
+using Africuisine.Domain.Models.Recipes;
 using Microsoft.EntityFrameworkCore;
 
 namespace Africuisine.Domain.Models.Pictures
@@ -15,5 +15,7 @@ namespace Africuisine.Domain.Models.Pictures
 
         [NotMapped]
         public Collection<ProfilePictureDM> ProfilePictures { get; set; }
+        [NotMapped]
+        public Collection<RecipePictureDM> RecipePictures { get; set; }
     }
 }
