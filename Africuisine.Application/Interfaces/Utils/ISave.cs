@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-public interface ISave
+namespace Africuisine.Application.Interfaces.Utils
 {
-    int GenerateBaseModelData(IEnumerable<EntityEntry> entries, CancellationToken cancellationToken = default);
+    public interface ISave
+    {
+        void GenerateBaseModelData(IEnumerable<EntityEntry> entries, CancellationToken cancellationToken = default);
+    }
 }

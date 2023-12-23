@@ -1,6 +1,6 @@
 namespace Africuisine.Application.Requests.Picture
 {
-    public class PictureSM : ServiceModelBase
+    public class PictureSM : DTOModelBase
     {
         public string Name {get; set;}
         public string Type {get; set;}

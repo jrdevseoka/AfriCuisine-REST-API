@@ -1,3 +1,4 @@
+using Africuisine.Application.Interfaces.Utils;
 using Africuisine.Domain.Models.Pictures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -15,7 +16,11 @@ namespace Africuisine.Infrastructure.Context
         {
             Save = save;
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
 
+            base.OnModelCreating(modelBuilder);
+        }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             IEnumerable<EntityEntry> entities = ChangeTracker

@@ -8,5 +8,6 @@ namespace Africuisine.Application.Interfaces.Auth
         Task<AuthResponse> SignInWithPasswordAndEmail(UserLoginCommand request);
         Task<AuthResponse> ResetPasswordWithEmail(ForgotPasswordCommand command);
         Task<AuthResponse> UpdatePassword(PasswordResetTokenCommand command);
+        Task<AuthResponse> RefreshToken(string email);
     }
 }

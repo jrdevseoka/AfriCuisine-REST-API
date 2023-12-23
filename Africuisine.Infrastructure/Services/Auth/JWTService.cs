@@ -46,6 +46,7 @@ namespace Africuisine.Infrastructure.Services.Auth
                 new("exp", DateTime.UtcNow.AddHours(5).ToLongDateString()),
                 new("aud", JWT.ValidAudience),
                 new("jti", Guid.NewGuid().ToString()),
+                new ("picture", user.Picture)
             };
 
             return claims;

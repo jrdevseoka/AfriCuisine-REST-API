@@ -6,6 +6,6 @@ namespace Africuisine.Application.Commands.User
         public string Email { get; set; }
         public string Password { get; set; }
         public string LRole { get; set; }
-        public string HostUri { get; set; }
+        public string Uri { get; set; }
     }
 }

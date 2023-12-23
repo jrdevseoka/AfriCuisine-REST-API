@@ -3,6 +3,7 @@ using Africuisine.Application.Commands.User;
 using Africuisine.Application.Interfaces.Auth;
 using Africuisine.Application.Interfaces.Error;
 using Africuisine.Domain.Models;
+using Africuisine.Infrastructure.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,21 @@ namespace Africuisine.API.Controllers.Auth
             {
                 var error = Error.MapErrorToAuthResponse(exception);
                 return BadRequest(error);
+            }
+        }
+
+        [HttpGet("{username}")]
+        public async Task<IActionResult> Refresh([FromQuery] string email)
+        {
+            try
+            {
+                var response = await Service.RefreshToken(email);
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                var response = Error.MapErrorToAuthResponse(exception);
+                return BadRequest(response);
             }
         }
     }

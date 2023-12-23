@@ -1,3 +1,4 @@
+using Africuisine.Application.Interfaces.Utils;
 using Africuisine.Domain.Models.Pictures;
 using Africuisine.Domain.Models.Recipes;
 using Africuisine.Infrastructure.Seeding;

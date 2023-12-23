@@ -35,9 +35,9 @@ namespace Africuisine.Infrastructure.Services.Auth
         public async Task<AuthResponse> SignInWithPasswordAndEmail(UserLoginCommand request)
         {
             var user = await UserManager.FindByEmailAsync(request.Username);
-            if (user is not null)
+            if (user is not null && await UserManager.CheckPasswordAsync(user, request.Password))
             {
-                if (await UserManager.CheckPasswordAsync(user, request.Password))
+                if (user.EmailConfirmed)
                 {
                     var response = await UserService.GetAuthenticatedUserDetails(user.Email);
                     var claims = JWTService.GenerateClaims(response.Item);
@@ -48,6 +48,9 @@ namespace Africuisine.Infrastructure.Services.Auth
                         Succeeded = !string.IsNullOrEmpty(token)
                     };
                 }
+                throw new UnauthorizedAccessException(
+                    "You are yet to verify this account belong to you. Generate a new account confirmation link"
+                );
             }
             return new AuthResponse { Message = "Invalid user credentials", Succeeded = false };
         }
@@ -89,6 +92,14 @@ namespace Africuisine.Infrastructure.Services.Auth
                 HttpStatusCode.NotFound,
                 $"User with '{command.Email}' email address does not exists."
             );
+        }
+
+        public async Task<AuthResponse> RefreshToken(string email)
+        {
+            var user = (await UserService.GetAuthenticatedUserDetails(email)).Item;
+            var claims = JWTService.GenerateClaims(user);
+            string token = JWTService.GenerateJWTToken(claims);
+            return new AuthResponse { Token = token, Succeeded = !string.IsNullOrEmpty(token) };
         }
     }
 }

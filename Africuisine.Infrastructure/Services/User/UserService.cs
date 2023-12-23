@@ -59,10 +59,14 @@ namespace Africuisine.Infrastructure.Services.User
                     string token = await Manager.GenerateEmailConfirmationTokenAsync(user);
                     try
                     {
-                        command.HostUri += GenerateEmailConfirmationURI(token, user.Email);
+                        command.Uri += GenerateEmailConfirmationURI(token, user.Email);
+                        var profile = (await GetAuthenticatedUserDetails(user.Email)).Item;
+                        var claims = JWTService.GenerateClaims(profile);
+                        // var postmakRes = await Postmark.SendTemplateEmail(user, command.Uri, "confirmation");
+                        response = await Manager.AddClaimsAsync(user, claims);
                         return new PostResponse
                         {
-                            Succeeded = true,
+                            Succeeded = response.Succeeded,
                             Message = "Your account was successfully created."
                         };
                     }
@@ -89,8 +93,11 @@ namespace Africuisine.Infrastructure.Services.User
         {
             var user = await Manager.FindByEmailAsync(email);
             var profile = Mapper.Map<ProfileSM>(user);
-            // var picture = await PictureService.GetActivatedProfilePic(user);
-            // profile.PictureUri = picture.Picture.Url;
+            var picture = await PictureService.GetActivatedProfilePic(user);
+            if (!string.IsNullOrEmpty(picture.Url))
+            {
+                profile.Picture = picture.Url;
+            }
             profile.Role = (await Manager.GetRolesAsync(user)).First();
             return new QueryItemResponse<ProfileSM>
             {
@@ -101,7 +108,10 @@ namespace Africuisine.Infrastructure.Services.User
 
         private static string GenerateErrorMessage(IEnumerable<IdentityError> errors)
         {
-            return string.Format($"{Environment.NewLine}", errors.Select(err => err.Description));
+            return string.Join(
+                $"{Environment.NewLine}",
+                errors.Select(err => err.Description).FirstOrDefault()
+            );
         }
 
         public IEnumerable<Claim> GenerateClaims(UserDM user, RoleDM role)
@@ -123,8 +133,12 @@ namespace Africuisine.Infrastructure.Services.User
         private static string GenerateEmailConfirmationURI(string token, string email)
         {
             string encodeEmail = Uri.EscapeDataString(email);
-            string encodedToken = Uri.UnescapeDataString(token);
-            return string.Format("users/confirm?token={0}&email={1}", encodedToken, encodeEmail);
+            string encodedToken = Uri.EscapeDataString(token);
+            return string.Format(
+                "api/1.0/users/confirm?token={0}&email={1}",
+                encodedToken,
+                encodeEmail
+            );
         }
 
         public async Task<PostResponse> ConfirmAccount(string email, string token)
@@ -155,16 +169,15 @@ namespace Africuisine.Infrastructure.Services.User
                         if (ppResponse.Succeeded)
                         {
                             var user = await Manager.FindByIdAsync(command.LUser);
-                            var response = await GetAuthenticatedUserDetails(user.Email);
-                            if (response.Succeeded)
+                            int rows = await PictureService.Save();
+                            if (rows > 0)
                             {
+                                var response = await GetAuthenticatedUserDetails(user.Email);
                                 await transaction.CommitAsync();
-                                int rows = await PictureService.Save();
-                                await transaction.DisposeAsync();
                                 return new PostResponse
                                 {
                                     Message = "You have successfully added a new picture.",
-                                    Succeeded = rows > 0
+                                    Succeeded = response.Succeeded
                                 };
                             }
                         }

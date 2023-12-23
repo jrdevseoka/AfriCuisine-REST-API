@@ -14,6 +14,7 @@ using Africuisine.Infrastructure.Seeding;
 using Africuisine.Application.Interfaces.Picture;
 using Africuisine.Infrastructure.Services.Picture;
 using Africuisine.Infrastructure.Helpers.Utils;
+using Africuisine.Application.Interfaces.Utils;
 
 namespace Africuisine.Infrastructure
 {

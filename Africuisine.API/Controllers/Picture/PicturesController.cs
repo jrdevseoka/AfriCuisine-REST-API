@@ -17,7 +17,6 @@ namespace Africuisine.API.Controllers.Picture
             UserService = user;
         }
         [HttpPost("profile")]
-        [Authorize]
         public async Task<IActionResult> SetProfile(CreatePictureCommand command)
         {
             var response = await UserService.SetProfilePicture(command);

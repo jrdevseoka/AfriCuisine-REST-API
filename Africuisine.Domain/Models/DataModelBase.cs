@@ -6,6 +6,7 @@ namespace Africuisine.Domain.Models
     public class DataModelBase
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Link { get; set; }
         public DateTime Creation { get; set; }
         public DateTime LastUpdate { get; set; }
