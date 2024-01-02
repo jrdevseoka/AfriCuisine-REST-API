@@ -1,7 +1,9 @@
 using Africuisine.API.Config;
+using Africuisine.Application.Commands.Picture;
 using Africuisine.Application.Commands.User;
 using Africuisine.Application.Interfaces.Error;
 using Africuisine.Application.Interfaces.User;
+using Africuisine.Application.Requests.Picture;
 using Africuisine.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +14,8 @@ namespace Africuisine.API.Controllers.Users
     {
         private readonly IUserService UserService;
 
-        public UsersController(IUserService userService, IErrorService<UserDM> error) : base(error)
+        public UsersController(IUserService userService, IErrorService<UserDM> error)
+            : base(error)
         {
             UserService = userService;
             Error = error;
@@ -24,26 +27,30 @@ namespace Africuisine.API.Controllers.Users
         {
             try
             {
+                request.Uri = GenerateUrl();
                 var response = await UserService.Create(request);
                 return Ok(response);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                var response = Error.MapErrorToPostResponse(exception);
+                return BadRequest(response);
             }
         }
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Profile([FromQuery]string email)
+
+        [HttpGet("confirm")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Confirm([FromQuery] string token, [FromQuery] string email)
         {
             try
             {
-                var response = await UserService.GetAuthenticatedUserDetails(email);
+                var response =  await UserService.ConfirmAccount(email, token);
                 return Ok(response);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                var response = Error.MapErrorToPostResponse(exception);
+                return BadRequest(response);
             }
         }
     }

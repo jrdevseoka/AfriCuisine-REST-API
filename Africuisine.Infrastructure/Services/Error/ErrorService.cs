@@ -52,5 +52,12 @@ namespace Africuisine.Infrastructure.Services.Error
 
         private static string GenerateErrorMessage(string name, Exception exception) =>
             $"An unexpected error occured in {name} service. Actual Error: {exception.Message}. {exception.InnerException}";
+
+        public PostResponse MapErrorToPostResponse(Exception exception)
+        {
+             var error = MapError(exception, out string message);
+            Logger.Error(message, exception);
+            return new PostResponse { Error = error, Message = message.Split('.').First() };
+        }
     }
 }

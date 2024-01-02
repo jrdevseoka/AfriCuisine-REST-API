@@ -5,7 +5,7 @@ namespace Africuisine.Infrastructure.Services
 {
     public class BaseService {
         protected readonly  IMapper Mapper;
-        private readonly INLogger Logger;
+        protected readonly INLogger Logger;
 
         public BaseService(INLogger logger, IMapper mapper)
         {

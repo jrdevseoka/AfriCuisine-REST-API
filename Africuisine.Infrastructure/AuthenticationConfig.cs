@@ -17,8 +17,8 @@ namespace Africuisine.Infrastructure
             services
                 .AddIdentity<UserDM, RoleDM>(opts =>
                 {
-                    opts.SignIn.RequireConfirmedEmail = true;
-                    opts.SignIn.RequireConfirmedAccount = true;
+                    opts.SignIn.RequireConfirmedEmail = false;
+                    opts.SignIn.RequireConfirmedAccount = false;
                     opts.User.RequireUniqueEmail = true;
                     opts.Password.RequiredLength = 8;
                     opts.Password.RequireLowercase = true;

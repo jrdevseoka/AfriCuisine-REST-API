@@ -1,8 +1,11 @@
+using Africuisine.Application.Requests.Picture;
+
 namespace Africuisine.Application.Requests.User
 {
-    public class ProfilePictureSM
+    public class ProfilePictureSM : DTOModelBase
     {
-        public string Path { get; set; }
-        public string Type { get; set; }
+        public bool Activated { get; set; }
+        public string LPicture { get; set; }
+        public PictureSM Picture {get; set;}
     }
 }

@@ -5,8 +5,10 @@ namespace Africuisine.Domain.Models.Pictures
     [Table("PROFILEPICTURES")]
     public class ProfilePictureDM : DataModelBase
     {
-        public string LUser { get; set; }
+        public bool Activated { get; set; }
         public string LPicture { get; set; }
 
+        [ForeignKey(nameof(LPicture))]
+        public PictureDM Picture { get; set; }
     }
 }

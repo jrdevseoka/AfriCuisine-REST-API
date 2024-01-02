@@ -5,7 +5,7 @@ namespace Africuisine.Application.Interfaces.Auth
 {
     public interface IPasswordService
     {
-        Task<AuthResponse> GetResetPasswordToken(string email, string uri);
+        Task<AuthResponse> GetResetPasswordToken(ForgotPasswordCommand command);
         Task<AuthResponse> ResetPassword(PasswordResetTokenCommand request);
     }
 }

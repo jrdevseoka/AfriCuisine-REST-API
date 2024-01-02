@@ -1,11 +1,11 @@
+
 namespace Africuisine.Application.Requests.User
 {
-    public class ProfileSM
+    public class ProfileSM : DTOModelBase
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public RoleSM Role { get; set; }
-        public ProfilePictureSM ProfilePicture { get; set; }
+        public string Role { get; set; }
+        public string Picture { get; set; }
     }
 }

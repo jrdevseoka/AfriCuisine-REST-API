@@ -3,6 +3,7 @@ using Africuisine.Application.Commands.User;
 using Africuisine.Application.Interfaces.Auth;
 using Africuisine.Application.Interfaces.Error;
 using Africuisine.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Africuisine.API.Controllers.Auth
@@ -17,13 +18,12 @@ namespace Africuisine.API.Controllers.Auth
             PasswordService = passwordService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Reset([FromQuery] string email)
+        [HttpPost("send-email")]
+        public async Task<IActionResult> Reset([FromBody] ForgotPasswordCommand command)
         {
             try
             {
-                string uri = GenerateUrl();
-                var response = await PasswordService.GetResetPasswordToken(email, uri);
+                var response = await PasswordService.GetResetPasswordToken(command);
                 return Ok(response);
             }
             catch (Exception exception)
@@ -33,8 +33,9 @@ namespace Africuisine.API.Controllers.Auth
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] PasswordResetTokenCommand command)
+        [HttpPost("update")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Update([FromBody] PasswordResetTokenCommand command)
         {
             try
             {
